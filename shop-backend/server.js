@@ -24,7 +24,12 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:3000", "http://localhost:3001"],
+        origin: [
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "https://s-d-jewels-costumer.vercel.app",
+            "https://s-d-jewels-admin.vercel.app"
+        ],
         methods: ["GET", "POST", "PUT", "DELETE"],
     },
 });
@@ -259,7 +264,12 @@ app.use('/api/users/login', authLimiter);
 
 // CORS Configuration
 const corsOptions = {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://s-d-jewels-costumer.vercel.app',
+        'https://s-d-jewels-admin.vercel.app'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
