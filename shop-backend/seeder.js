@@ -45,34 +45,55 @@ const generateUsersData = (numUsers = 55) => {
     return users;
 };
 
+// Helper to get realistic jewelry images from Unsplash source
+const getJewelryImage = (category, index) => {
+    // Used curated keywords to get relevant images
+    const keywords = {
+        'Rings': 'diamond ring, gold ring, engagement ring',
+        'Necklaces': 'gold necklace, diamond necklace, pendant',
+        'Earrings': 'gold earrings, diamond studs, jewelry',
+        'Bracelets': 'gold bracelet, diamond bracelet, jewelry',
+        'Bangles': 'indian bangles, gold bangles, jewelry',
+        'Pendants': 'gold pendant, diamond pendant, necklace'
+    };
+
+    // Use source.unsplash.com with specific keywords and a random sig to avoid caching duplicates
+    return `https://source.unsplash.com/400x400/?${keywords[category] || 'jewelry'}&sig=${index}`;
+};
+
 const generateJewelryData = (numEntries = 150, userId) => {
     const products = [];
     const carats = ['14k', '18k', '22k', '24k'];
+    const materials = ['Gold', 'Diamond', 'Silver', 'Platinum', 'Rose Gold'];
+    const adjectives = ['Elegant', 'Exquisite', 'Classic', 'Modern', 'Vintage', 'Luxury', 'Handcrafted', 'Sparkling'];
 
     for (let i = 0; i < numEntries; i++) {
         const category = faker.helpers.arrayElement(categoriesList);
-        const name = `${faker.commerce.productAdjective()} ${faker.commerce.productMaterial()} ${category}`;
+        const material = faker.helpers.arrayElement(materials);
+        const adjective = faker.helpers.arrayElement(adjectives);
+
+        const name = `${adjective} ${material} ${category}`; // e.g., "Elegant Gold Ring"
 
         products.push({
             user: userId,
             name: name,
-            image: `https://picsum.photos/seed/${faker.string.uuid()}/400/400`,
+            image: getJewelryImage(category, i),
             images: [
-                `https://picsum.photos/seed/${faker.string.uuid()}/400/400`,
-                `https://picsum.photos/seed/${faker.string.uuid()}/400/400`
+                getJewelryImage(category, i + 1000),
+                getJewelryImage(category, i + 2000)
             ],
-            description: faker.commerce.productDescription(),
+            description: `Experience the luxury of this ${name}. Crafted with precision and care, this piece features authentic ${material} and a timeless design suitable for any occasion.`,
             brand: 'S.D. Jewels',
-            productDetails: `Handcrafted ${name} featuring premium finish and elegant design.`,
-            weight: `${faker.number.float({ min: 1, max: 50, fractionDigits: 1 })}g`,
-            carat: faker.helpers.arrayElement(carats),
-            category: [category, 'Jewelry'],
-            price: faker.number.int({ min: 500, max: 15000 }),
-            countInStock: faker.number.int({ min: 0, max: 100 }),
-            rating: faker.number.float({ min: 3.5, max: 5, fractionDigits: 1 }),
-            numReviews: faker.number.int({ min: 0, max: 200 }),
+            productDetails: `Material: ${material}\nCategory: ${category}\nFinish: High Polish\nCertified: Yes`,
+            weight: `${faker.number.float({ min: 2, max: 20, fractionDigits: 1 })}g`,
+            carat: material.includes('Gold') ? faker.helpers.arrayElement(carats) : undefined,
+            category: [category, 'Jewelry', material],
+            price: faker.number.int({ min: 5000, max: 250000 }), // More realistic prices for jewelry
+            countInStock: faker.number.int({ min: 1, max: 50 }),
+            rating: faker.number.float({ min: 4.0, max: 5, fractionDigits: 1 }), // Good ratings for demo
+            numReviews: faker.number.int({ min: 5, max: 100 }),
             reviews: [],
-            featured: faker.datatype.boolean(0.2), // 20% chance of being featured
+            featured: faker.datatype.boolean(0.1), // 10% featured
         });
     }
 
