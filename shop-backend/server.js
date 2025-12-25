@@ -20,6 +20,9 @@ const { Server } = require('socket.io');
 dotenv.config();
 
 const app = express();
+// Enable proxy trust for Render deployment 
+// This is critical for express-rate-limit to work correctly behind a load balancer
+app.set('trust proxy', 1);
 const server = http.createServer(app);
 
 const io = new Server(server, {
