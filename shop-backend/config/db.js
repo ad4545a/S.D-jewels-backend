@@ -3,7 +3,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const connectDB = async () => {
     try {
-        let uri = process.env.MONGO_URI || 'mongodb://localhost:27017/sd_jewels';
+        let uri = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/sd_jewels';
 
         if (process.env.USE_MEMORY_DB && process.env.USE_MEMORY_DB.trim() === 'true') {
             console.log('Starting In-Memory MongoDB...');
